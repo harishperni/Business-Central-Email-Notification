@@ -3,5 +3,4 @@
 .vscode/
 *.app
 *.alcache
-# macOS
 .DS_Store
