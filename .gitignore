@@ -1,0 +1,7 @@
+.alpackages/
+.snapshots/
+.vscode/
+*.app
+*.alcache
+# macOS
+.DS_Store
