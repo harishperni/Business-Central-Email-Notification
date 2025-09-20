@@ -1,64 +1,50 @@
 codeunit 50143 "PO Email Subscribers"
 {
-    // 1) PO Released -> "Created"
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Purchase Document", 'OnAfterReleasePurchaseDoc', '', false, false)]
-    local procedure OnAfterReleasePurchaseDoc(var PurchaseHeader: Record "Purchase Header")
-    var
-        Helper: Codeunit "PO Email Helper";
-    begin
-        if PurchaseHeader."Document Type" = PurchaseHeader."Document Type"::Order then
-            Helper.Notify_POCreated_OnRelease(PurchaseHeader);
-    end;
-
-    // 2) Warehouse Receipt CREATED -> "Shipped"
+    // --- Shipped: fire when a Warehouse Receipt is created (no lock with Release) ---
     [EventSubscriber(ObjectType::Table, Database::"Warehouse Receipt Header", 'OnAfterInsertEvent', '', false, false)]
-    local procedure OnWhseReceiptInserted(var Rec: Record "Warehouse Receipt Header")
+    local procedure OnWrInserted(var Rec: Record "Warehouse Receipt Header")
     var
         Helper: Codeunit "PO Email Helper";
-        L: Record "Warehouse Receipt Line";
-        PurchHeader: Record "Purchase Header";
-        PONumbers: List of [Code[20]];
+        WrLine: Record "Warehouse Receipt Line";
+        PH: Record "Purchase Header";
+        PONos: List of [Code[20]];
         PONo: Code[20];
     begin
-        // Collect unique POs on this receipt
-        L.SetRange("No.", Rec."No.");
-        L.SetRange("Source Document", L."Source Document"::"Purchase Order");
-        if L.FindSet() then
+        WrLine.SetRange("No.", Rec."No.");
+        WrLine.SetRange("Source Document", WrLine."Source Document"::"Purchase Order");
+        if WrLine.FindSet() then
             repeat
-                PONo := L."Source No.";
-                if (PONo <> '') and not PONumbers.Contains(PONo) then
-                    PONumbers.Add(PONo);
-            until L.Next() = 0;
+                PONo := WrLine."Source No.";
+                if (PONo <> '') and not PONos.Contains(PONo) then
+                    PONos.Add(PONo);
+            until WrLine.Next() = 0;
 
-        // Notify once per PO represented on the WR
-        foreach PONo in PONumbers do
-            if PurchHeader.Get(PurchHeader."Document Type"::Order, PONo) then
-                Helper.Notify_Shipped_OnWhseReceiptCreated(Rec, PurchHeader);
+        foreach PONo in PONos do
+            if PH.Get(PH."Document Type"::Order, PONo) then
+                Helper.Notify_Shipped_OnWhseReceiptCreated(Rec, PH);
     end;
 
-    // 3) Posted Warehouse Receipt CREATED -> "Arrived"
+    // --- Arrived: fire when a Posted Warehouse Receipt is created (no lock with Release) ---
     [EventSubscriber(ObjectType::Table, Database::"Posted Whse. Receipt Header", 'OnAfterInsertEvent', '', false, false)]
-    local procedure OnPostedWhseReceiptInserted(var Rec: Record "Posted Whse. Receipt Header")
+    local procedure OnPostedWrInserted(var Rec: Record "Posted Whse. Receipt Header")
     var
         Helper: Codeunit "PO Email Helper";
-        L: Record "Posted Whse. Receipt Line";
-        PurchHeader: Record "Purchase Header";
-        PONumbers: List of [Code[20]];
+        PL: Record "Posted Whse. Receipt Line";
+        PH: Record "Purchase Header";
+        PONos: List of [Code[20]];
         PONo: Code[20];
     begin
-        // Collect unique POs on this posted receipt
-        L.SetRange("No.", Rec."No.");
-        L.SetRange("Source Document", L."Source Document"::"Purchase Order");
-        if L.FindSet() then
+        PL.SetRange("No.", Rec."No.");
+        PL.SetRange("Source Document", PL."Source Document"::"Purchase Order");
+        if PL.FindSet() then
             repeat
-                PONo := L."Source No.";
-                if (PONo <> '') and not PONumbers.Contains(PONo) then
-                    PONumbers.Add(PONo);
-            until L.Next() = 0;
+                PONo := PL."Source No.";
+                if (PONo <> '') and not PONos.Contains(PONo) then
+                    PONos.Add(PONo);
+            until PL.Next() = 0;
 
-        // Notify once per PO represented on the posted WR
-        foreach PONo in PONumbers do
-            if PurchHeader.Get(PurchHeader."Document Type"::Order, PONo) then
-                Helper.Notify_Arrived_FromPostedReceipt(Rec, PurchHeader);
+        foreach PONo in PONos do
+            if PH.Get(PH."Document Type"::Order, PONo) then
+                Helper.Notify_Arrived_OnWhseReceiptPosted(Rec, PH);
     end;
 }

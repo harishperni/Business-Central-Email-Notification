@@ -2,31 +2,20 @@
   "id": "c608a69c-6e0b-46f2-86db-0cff169433f2",
   "name": "PO - Email Notification",
   "publisher": "Default Publisher",
-  "version": "1.0.18.0",
-  "brief": "",
-  "description": "",
-  "privacyStatement": "",
-  "EULA": "",
-  "help": "",
-  "url": "",
-  "logo": "",
-  "dependencies": [],
-  "screenshots": [],
+  "version": "1.0.39.0",
+
+  "brief": "PO lifecycle notification emails",
+  "description": "Sends emails when a Purchase Order is released, a Warehouse Receipt is created, and when a Warehouse Receipt is posted.",
+
   "platform": "25.0.0.0",
   "application": "25.0.0.0",
-  "idRanges": [
-    {
-      "from": 50100,
-      "to": 50149
-    }
-  ],
+
+  "idRanges": [{ "from": 50100, "to": 50149 }],
+  "runtime": "14.0",
+  "features": ["NoImplicitWith"],
   "resourceExposurePolicy": {
     "allowDebugging": true,
     "allowDownloadingSource": true,
     "includeSourceInSymbolFile": true
-  },
-  "runtime": "14.0",
-  "features": [
-    "NoImplicitWith"
-  ]
+  }
 }

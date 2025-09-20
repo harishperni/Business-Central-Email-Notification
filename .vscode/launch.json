@@ -1,21 +1,27 @@
 {
     "version": "0.2.0",
     "configurations": [
-
-        {
-            "name": "Microsoft cloud sandbox",
-            "request": "launch",
-            "type": "al",
-            "environmentType": "Sandbox",
-            "environmentName": "Sandbox_Dev_Continia_RSM_DNP",
-            "server": "https://businesscentral.dynamics.com",
-            "startupObjectId": 22,
-            "startupObjectType": "Page",
-            "breakOnError": "All",
-            "authentication": "AAD",
-            "launchBrowser": true,
-            "enableLongRunningSqlStatements": true,
-            "enableSqlInformationDebugger": true
-        }
+      {
+        "name": "Microsoft cloud sandbox",
+        "type": "al",
+        "request": "launch",
+  
+        "environmentType": "Sandbox",
+        "environmentName": "Sandbox_Dev_Continia_RSM_DNP",
+  
+        "server": "https://api.businesscentral.dynamics.com",
+  
+        "authentication": "AAD",
+        "startupObjectType": "Page",
+        "startupObjectId": 22,
+  
+        "schemaUpdateMode": "Synchronize",
+        "breakOnError": "All",
+        "launchBrowser": true,
+  
+        "enableLongRunningSqlStatements": true,
+        "enableSqlInformationDebugger": true,
+        "diagnosticTraceLevel": "Verbose"
+      }
     ]
-}
+  }
