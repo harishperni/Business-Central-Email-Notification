@@ -2,7 +2,7 @@
   "id": "6E56CA7D-E6F5-4AAC-8F2E-BEA9F0E5D49A",
   "name": "PO - Email Notification",
   "publisher": "Default Publisher",
-  "version": "1.0.50.0",
+  "version": "1.0.51.0",
 
   "brief": "PO lifecycle notification emails",
   "description": "Sends emails when a Purchase Order is released, a Warehouse Receipt is created, and when a Warehouse Receipt is posted.",
