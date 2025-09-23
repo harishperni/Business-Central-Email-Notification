@@ -25,4 +25,10 @@ codeunit 50146 "PO Email State"
     begin
         ArrivedSent.Set(PostedReceiptNo, true);
     end;
+
+    procedure ResetAll()
+    begin
+        CLEAR(ShippedSent);
+        CLEAR(ArrivedSent);
+    end;
 }
